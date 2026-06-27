@@ -1,48 +1,162 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Clean Up Stapleford – Bag Report</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #e8f5e9;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+    }
+
+    .container {
+        background: white;
+        width: 90%;
+        max-width: 500px;
+        margin-top: 40px;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        text-align: center;
+    }
+
+    .logo {
+        width: 120px;
+        margin-bottom: 10px;
+    }
+
+    h2 {
+        margin-top: 0;
+        color: #2e7d32;
+    }
+
+    .instruction-box {
+        background: #f1f8e9;
+        padding: 15px;
+        border-left: 5px solid #66bb6a;
+        text-align: left;
+        margin-bottom: 20px;
+        border-radius: 6px;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-top: 15px;
+        text-align: left;
+    }
+
+    select, textarea, input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 15px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #43a047;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #2e7d32;
+    }
+
+    .kit-count {
+        background: #c8e6c9;
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        font-weight: bold;
+        color: #1b5e20;
+    }
+</style>
+</head>
+
 <body>
 
-<h3>Loan‑Out Kit Bag Report</h3>
+<div class="container">
 
-<label>Which kit did you use?</label><br>
-<select id="kit">
-  <option value="Kit 1">Kit 1</option>
-  <option value="Kit 2">Kit 2</option>
-</select><br><br>
+    <!-- Logo placeholder -->
+    <img src="https://cleanupstapleford.co.uk/logo.png" class="logo" alt="Clean Up Stapleford Logo">
 
-<label>Is there a bag ready for collection?</label><br>
-<select id="bag">
-  <option value="Yes">Yes</option>
-  <option value="No">No</option>
-</select><br><br>
+    <h2>Report a Full Bag</h2>
 
-<label>Notes (optional)</label><br>
-<textarea id="notes"></textarea><br><br>
+    <div class="kit-count">10 Kits Available</div>
 
-<button onclick="getLocation()">Use my location</button><br><br>
+    <div class="instruction-box">
+        <strong>Before you report:</strong>
+        <ul>
+            <li>Place the bag somewhere safe and not blocking paths or driveways.</li>
+            <li>Take a photo of the bag in its location.</li>
+            <li>Stand next to the bag when reporting so your phone captures the correct GPS location.</li>
+        </ul>
+    </div>
 
-<form id="reportForm" method="POST" action="https://script.google.com/macros/s/AKfycbx1QXYv6aAaotkx9-3BPrrfUxXhTvVjV4e7hxxmKRnN2_oY_2o4LPn8gnjP-ojbag34/exec">
-  <input type="hidden" name="kit" id="kitField">
-  <input type="hidden" name="bag" id="bagField">
-  <input type="hidden" name="notes" id="notesField">
-  <input type="hidden" name="lat" id="latField">
-  <input type="hidden" name="lon" id="lonField">
-  <button type="submit">Submit Report</button>
-</form>
+    <label>Which kit did you use?</label>
+    <select id="kit">
+        <option value="Kit 1">Kit 1</option>
+        <option value="Kit 2">Kit 2</option>
+        <option value="Kit 3">Kit 3</option>
+        <option value="Kit 4">Kit 4</option>
+        <option value="Kit 5">Kit 5</option>
+        <option value="Kit 6">Kit 6</option>
+        <option value="Kit 7">Kit 7</option>
+        <option value="Kit 8">Kit 8</option>
+        <option value="Kit 9">Kit 9</option>
+        <option value="Kit 10">Kit 10</option>
+    </select>
+
+    <label>Notes (optional)</label>
+    <textarea id="notes" placeholder="Anything we should know?"></textarea>
+
+    <label>Upload a photo</label>
+    <input type="file" id="photo" accept="image/*">
+
+    <button onclick="getLocation()">Use my location</button>
+
+    <form id="reportForm" method="POST" enctype="multipart/form-data"
+          action="https://script.google.com/macros/s/AKfycbx1QXYv6aAaotkx9-3BPrrfUxXhTvVjV4e7hxxmKRnN2_oY_2o4LPn8gnjP-ojbag34/exec">
+
+        <input type="hidden" name="kit" id="kitField">
+        <input type="hidden" name="notes" id="notesField">
+        <input type="hidden" name="lat" id="latField">
+        <input type="hidden" name="lon" id="lonField">
+
+        <button type="submit">Submit Report</button>
+    </form>
+
+</div>
 
 <script>
 function getLocation() {
-  navigator.geolocation.getCurrentPosition(function(pos) {
-    document.getElementById("latField").value = pos.coords.latitude;
-    document.getElementById("lonField").value = pos.coords.longitude;
-    alert("Location captured — you can now submit the form.");
-  });
+    navigator.geolocation.getCurrentPosition(function(pos) {
+        document.getElementById("latField").value = pos.coords.latitude;
+        document.getElementById("lonField").value = pos.coords.longitude;
+        alert("Location captured — you can now submit the form.");
+    });
 }
 
 document.getElementById("reportForm").addEventListener("submit", function() {
-  document.getElementById("kitField").value = document.getElementById("kit").value;
-  document.getElementById("bagField").value = document.getElementById("bag").value;
-  document.getElementById("notesField").value = document.getElementById("notes").value;
+    document.getElementById("kitField").value = document.getElementById("kit").value;
+    document.getElementById("notesField").value = document.getElementById("notes").value;
 });
 </script>
 
