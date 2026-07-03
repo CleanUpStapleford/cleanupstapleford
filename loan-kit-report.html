@@ -18,10 +18,10 @@
         max-width: 500px;
         margin: auto;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        text-align: left; /* FIX: stops inputs drifting right */
+        text-align: left;
     }
     .center {
-        text-align: center; /* FIX: only centre logo + heading */
+        text-align: center;
     }
     img.logo {
         width: 140px;
@@ -43,7 +43,7 @@
         border-radius: 5px;
         border: 1px solid #ccc;
         font-size: 16px;
-        box-sizing: border-box; /* FIX: prevents overflow to the right */
+        box-sizing: border-box;
     }
     button {
         background: #2a7c2a;
@@ -81,7 +81,6 @@
     <h2>Loan Kit Report</h2>
 </div>
 
-<!-- NEW INSTRUCTIO BOX -->
 <div class="instruction-box">
     Please ensure the bag of litter is placed in an accessible area, preferably next to a public bin, and not blocking wheelchair users, driveways, or footpaths.<br><br>
     Do <strong>not</strong> place the bag inside a bin, as this may cause disruptions to local residents and lead to overflowing bins.<br><br>
@@ -139,29 +138,31 @@ document.getElementById("locButton").addEventListener("click", function() {
     });
 });
 
-// Handle form submission WITHOUT redirect
+// Safe thank-you message (no backticks)
 document.getElementById("reportForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
-    const form = e.target;
-    const data = new FormData(form);
+    var form = e.target;
+    var data = new FormData(form);
 
     fetch(form.action, {
         method: "POST",
         body: data
     })
-    .then(res => res.text())
-    .then(result => {
-        document.querySelector(".container").innerHTML = `
-            <div class="center">
-                <img src="https://cleanupstapleford.github.io/cleanupstapleford/logo.png" class="logo" alt="Clean Up Stapleford Logo">
-                <h2>Report Submitted ✔️</h2>
-            </div>
-            <p>Your email has been sent successfully.</p>
-            <p>Thank you — you can now return your equipment.</p>
-        `;
+    .then(function(res) { return res.text(); })
+    .then(function(result) {
+
+        var html = "";
+        html += '<div class="center">';
+        html += '<img src="https://cleanupstapleford.github.io/cleanupstapleford/logo.png" class="logo" alt="Clean Up Stapleford Logo">';
+        html += '<h2>Report Submitted ✔️</h2>';
+        html += '</div>';
+        html += '<p>Your email has been sent successfully.</p>';
+        html += '<p>Thank you — you can now return your equipment.</p>';
+
+        document.querySelector(".container").innerHTML = html;
     })
-    .catch(err => {
+    .catch(function(err) {
         alert("Something went wrong submitting your report. Please try again.");
     });
 });
