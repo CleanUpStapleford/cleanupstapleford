@@ -88,7 +88,7 @@
     Ensure you return the equipment to the place it was loaned from after submitting this report. Failure to do so may result in an investigation.
 </div>
 
-<form id="reportForm" action="https://script.google.com/macros/s/AKfycbwFwHDisdeF7vaH6riWqmTMF95EtJY5ZF8g-M6SY3BA8S-_zpSp8uz9rc3SWqHSl2r1pw/exec"POST">
+<form id="reportForm" action="https://script.google.com/macros/s/AKfycbxXg0U165mtVfDTpcrL3lsZ5qMAB8G_bXUijiNSpaGMhiNGzxJegumNGx-jtgPdhVddNA/exec" method="POST">
 
     <label>Street Name (where the bag was left)</label>
     <input type="text" name="street" required>
@@ -110,6 +110,11 @@
 
     <label>Notes</label>
     <textarea name="notes"></textarea>
+
+    <label>Upload Photos (optional)</label>
+    <input type="file" id="photos" name="photos" accept="image/*" multiple>
+
+    <input type="hidden" name="photoData" id="photoData">
 
     <input type="hidden" name="lat" id="latField">
     <input type="hidden" name="lon" id="lonField">
@@ -138,7 +143,25 @@ document.getElementById("locButton").addEventListener("click", function() {
     });
 });
 
-// Safe thank-you message (no backticks)
+// Convert multiple photos to Base64 before submitting
+document.getElementById("reportForm").addEventListener("submit", async function(e) {
+    const files = document.getElementById("photos").files;
+    if (files.length > 0) {
+        const base64Array = [];
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+            const base64 = await new Promise(resolve => {
+                reader.onload = () => resolve(reader.result.split(",")[1]);
+                reader.readAsDataURL(file);
+            });
+            base64Array.push(base64);
+        }
+        document.getElementById("photoData").value = JSON.stringify(base64Array);
+    }
+});
+
+// Handle form submission WITHOUT redirect
 document.getElementById("reportForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
