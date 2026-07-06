@@ -88,7 +88,7 @@
     Ensure you return the equipment to the place it was loaned from after submitting this report. Failure to do so may result in an investigation.
 </div>
 
-<form id="reportForm" action="https://script.google.com/macros/s/AKfycbwtczl9qkotCjiouAOwjEks_cQm1kOlqrj1KbikExyuukmprUnPaDXmTPdvdhDwpAVZ/exec" method="POST">
+<form id="reportForm" action="https://script.google.com/macros/s/AKfycbxXg0U165mtVfDTpcrL3lsZ5qMAB8G_bXUijiNSpaGMhiNGzxJegumNGx-jtgPdhVddNA/exec" method="POST">
 
     <label>Street Name (where the bag was left)</label>
     <input type="text" name="street" required>
@@ -143,8 +143,11 @@ document.getElementById("locButton").addEventListener("click", function() {
     });
 });
 
-// Convert multiple photos to Base64 before submitting
+// SINGLE unified submit handler
 document.getElementById("reportForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    // Convert photos to Base64
     const files = document.getElementById("photos").files;
     if (files.length > 0) {
         const base64Array = [];
@@ -159,12 +162,8 @@ document.getElementById("reportForm").addEventListener("submit", async function(
         }
         document.getElementById("photoData").value = JSON.stringify(base64Array);
     }
-});
 
-// Handle form submission WITHOUT redirect
-document.getElementById("reportForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
+    // Submit form AFTER photoData is ready
     var form = e.target;
     var data = new FormData(form);
 
@@ -172,12 +171,12 @@ document.getElementById("reportForm").addEventListener("submit", function(e) {
         method: "POST",
         body: data
     })
-    .then(function(res) { return res.text(); })
-    .then(function(result) {
+    .then(res => res.text())
+    .then(result => {
 
         var html = "";
         html += '<div class="center">';
-        html += '<img src="https://cleanupstapleford.github.io/cleanupstapleford/logo.png" class="logo" alt="Clean Up Stapleford Logo">';
+        html += '<img src="https://cleanupstapleford.github.io/cleanupstapleford/logo.png" class="logo">';
         html += '<h2>Report Submitted ✔️</h2>';
         html += '</div>';
         html += '<p>Your email has been sent successfully.</p>';
@@ -185,7 +184,7 @@ document.getElementById("reportForm").addEventListener("submit", function(e) {
 
         document.querySelector(".container").innerHTML = html;
     })
-    .catch(function(err) {
+    .catch(err => {
         alert("Something went wrong submitting your report. Please try again.");
     });
 });
