@@ -23,6 +23,11 @@
     .center {
         text-align: center;
     }
+
+    .center-text {
+        text-align: center;
+    }
+
     img.logo {
         width: 140px;
         margin-bottom: 15px;
@@ -205,10 +210,11 @@ document.getElementById("reportForm").addEventListener("submit", async function(
         html += '<img src="https://cleanupstapleford.github.io/cleanupstapleford/logo.png" class="logo">';
         html += '<h2>Report Submitted ✔️</h2>';
         html += '</div>';
-        html += '<p>Your email has been sent successfully.</p>';
-        html += '<p>Thank you — you can now return your equipment.</p>';
+        html += '<p class="center-text">Your email has been sent successfully.</p>';
+        html += '<p class="center-text">Thank you — you can now return your equipment.</p>';
 
         document.querySelector(".container").innerHTML = html;
+
     })
     .catch(err => {
         alert("Something went wrong submitting your report. Please try again.");
