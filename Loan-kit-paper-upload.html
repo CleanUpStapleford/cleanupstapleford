@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload Paper Report</title>
+
+<style>
+    body {
+        background: #f4f4f4;
+        font-family: Arial, sans-serif;
+        padding: 20px;
+    }
+    .container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 500px;
+        margin: auto;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        text-align: left;
+    }
+    .center {
+        text-align: center;
+    }
+    img.logo {
+        width: 140px;
+        margin-bottom: 15px;
+    }
+    h2 {
+        color: #2a7c2a;
+        margin-bottom: 10px;
+    }
+    label {
+        font-weight: bold;
+        margin-top: 10px;
+        display: block;
+    }
+    input, button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+    button {
+        background: #2a7c2a;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+    button:hover {
+        background: #256b25;
+    }
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="center">
+    <img src="https://cleanupstapleford.github.io/cleanupstapleford/logo.png" class="logo" alt="Clean Up Stapleford Logo">
+    <h2>Upload Paper Report</h2>
+</div>
+
+<form id="paperForm" action="https://script.google.com/macros/s/AKfycbxXg0U165mtVfDTpcrL3lsZ5qMAB8G_bXUijiNSpaGMhiNGzxJegumNGx-jtgPdhVddNA/exec" method="POST">
+
+    <label>Photo of Completed Paper Sheet</label>
+    <input type="file" id="photo" name="photo" accept="image/*" required>
+
+    <input type="hidden" name="photoData" id="photoData">
+
+    <button type="submit">Submit Paper Report</button>
+</form>
+
+</div>
+
+<script>
+// Convert photo to Base64 before submitting
+document.getElementById("paperForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const file = document.getElementById("photo").files[0];
+    if (file) {
+        const reader = new FileReader();
+        const base64 = await new Promise(resolve => {
+            reader.onload = () => resolve(reader.result.split(",")[1]);
+            reader.readAsDataURL(file);
+        });
+        document.getElementById("photoData").value = JSON.stringify([base64]);
+    }
+
+    var form = e.target;
+    var data = new FormData(form);
+
+    fetch(form.action, {
+        method: "POST",
+        body: data
+    })
+    .then(res => res.text())
+    .then(result => {
+
+        var html = "";
+        html += '<div class="center">';
+        html += '<img src="https://cleanupstapleford.github.io/cleanupstapleford/logo.png" class="logo">';
+        html += '<h2>Paper Report Submitted ✔️</h2>';
+        html += '</div>';
+        html += '<p>The paper report has been uploaded successfully.</p>';
+        html += '<p>Thank you — this record is now stored safely.</p>';
+
+        document.querySelector(".container").innerHTML = html;
+    })
+    .catch(err => {
+        alert("Something went wrong submitting the report. Please try again.");
+    });
+});
+</script>
+
+</body>
+</html>
