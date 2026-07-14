@@ -103,11 +103,10 @@
 
 <div class="instruction-box">
     Please ensure any bags of litter are placed safely and do not block footpaths, driveways, or wheelchair access.<br><br>
-    If you include a location capture (what3words or map link), this helps us collect bags more accurately.<br><br>
     Add any details you'd like included in the Facebook post in the notes section.
 </div>
 
-<form id="reportForm" action=https://script.google.com/macros/s/AKfycbyqqlgtiDZa0ybdiZyUuVaIvkubdBtQipauoWJLVvJycqe_nuPzx2W9vevbptS7M9FH6w/exec" method="POST">
+<form id="reportForm" action="YOUR_SCRIPT_URL_HERE" method="POST">
 
     <label>Your Name</label>
     <input type="text" name="volunteerName" required>
@@ -115,11 +114,8 @@
     <label>Streets/Areas Covered & Facebook Post Notes</label>
     <textarea name="streetsCovered" rows="4" required></textarea>
 
-    <label>Location (Street / Area)</label>
+    <label>Location of Bag (Street / Area)</label>
     <input type="text" name="locationText" required>
-
-    <label>Location Capture (Optional)</label>
-    <input type="text" name="locationCapture" placeholder="what3words, map link, dropped pin URL">
 
     <label>Upload Photos (optional)</label>
     <input type="file" id="photos" name="photos" accept="image/*" multiple>
@@ -182,6 +178,11 @@ document.getElementById("reportForm").addEventListener("submit", async function(
     .then(res => res.text())
     .then(result => {
         document.getElementById("loadingOverlay").style.display = "none";
+
+        if (result.indexOf("ERROR") === 0) {
+            alert("There was a problem with the form: " + result);
+            return;
+        }
 
         var html = "";
         html += '<div class="center">';
